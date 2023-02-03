@@ -24,7 +24,8 @@ namespace ProjectApp.libs
         {
             var musicTotalPerClientList = MusicDataList?
                         .Where(dt => dt.PlayTs.ToString(DateFormat) == Dt.ToString(DateFormat))
-                        .DistinctBy(dt => dt.SongId)
+                        .DistinctBy(dt => new { dt.ClientId, dt.SongId })
+                        // .Distinct(new MusicDataClientSongComparer())
                         .GroupBy(dt => dt.ClientId)
                         .Select(dt => new { clientId = dt.Key, distinctPlayCount = dt.Count() });
 
@@ -45,7 +46,7 @@ namespace ProjectApp.libs
 
             contents?.Insert(0, @"DISTINCT_PLAY_COUNT,CLIENT_COUNT");
 
-            if(contents != null)
+            if (contents != null)
             {
                 FileActionHandler.WriteFileContents(FilePath.Replace("input", "output"), contents);
             }
@@ -68,6 +69,19 @@ namespace ProjectApp.libs
             DateTime playTs = Convert.ToDateTime(lineParts[3]);
 
             return new MusicData(playId, songId, clientId, playTs);
+        }
+    }
+
+    class MusicDataClientSongComparer : IEqualityComparer<MusicData>
+    {
+        public bool Equals(MusicData? x, MusicData? y)
+        {
+            return x?.ClientId == y?.ClientId && x?.SongId == y?.SongId;
+        }
+
+        public int GetHashCode(MusicData obj)
+        {
+            return obj.ClientId.GetHashCode() ^ obj.SongId.GetHashCode();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ProjectApp
             mdh.ProduceResult();
             mdh.WriteMusicDataToFile();
 
-            var resultList = mdh.ResultDataList;
+            // var resultList = mdh.ResultDataList;
 
             // if (resultList != null)
             // {
@@ -42,7 +42,7 @@ namespace ProjectApp
 
             // Console.WriteLine(resultList?.MaxBy(dt => dt.DistinctPlayCount)?.DistinctPlayCount);
             // Console.WriteLine(mdh.MusicDataList?.Count());
-            // Console.WriteLine(mdh.ResultDataList?.Where(dt => dt.DistinctPlayCount == 346).Count());
+            // Console.WriteLine(mdh.ResultDataList?.Where(dt => dt.DistinctPlayCount == 346).ElementAt(0).ClientCount);
         }
     }
 }
